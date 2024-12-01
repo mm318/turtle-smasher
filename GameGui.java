@@ -4,16 +4,19 @@
 //Programmer: Miaofei Mei
 /////////////////////////////////////////////////////////////
 
-import javax.swing.*;
 import java.applet.*;
-import java.awt.event.*;
 import java.awt.*;
+import java.awt.event.*;
+import java.io.File;
+import java.net.URL;
+import java.net.MalformedURLException;
 import java.sql.Time;
+import javax.swing.*;
 
 //this applet is the culminating game
 public class GameGui extends JApplet implements KeyListener {
   public int LEVEL_NUM;
-  public int NUM_PLAYERS;                         //up to 3 players, others won't have keys
+  public int NUM_PLAYERS;                             //up to 3 players, others won't have keys
 
   public static final int BOARD_COLUMNS = 119;        //number of board columns
   public static final int BOARD_ROWS = 95;            //number of board rows
@@ -24,7 +27,8 @@ public class GameGui extends JApplet implements KeyListener {
   private static final int APPLET_WIDTH = BOARD_COLUMNS * COLUMN_WIDTH;   //applet window width
   private static final int APPLET_HEIGHT = BOARD_ROWS * ROW_HEIGHT;       //applet window height
 
-  private final Color BACKGROUND = Color.black, UNSELECTED = Color.white, SELECTED = Color.red, GAME_STATS = new Color(49, 142, 1);
+  private final Color BACKGROUND = Color.black, UNSELECTED = Color.white,
+                      SELECTED = Color.red, GAME_STATS = new Color(49, 142, 1);
 
   private Image doubleBufferImage;
   private Graphics doubleBufferGraphics;
@@ -42,7 +46,8 @@ public class GameGui extends JApplet implements KeyListener {
   private GameBoard board;                            //the game board; keeps track of the board in memory
 
   private int gameStatus = 0;                         //int indicating the screen at which the game is
-  private final int MAIN_MENU = 0, CHOOSE_NUMPLAYER = 1, HIGH_SCORES = 2, HIGH_SCORES_PAUSED = 3, IN_GAME_INTRO = 4, IN_GAME = 5, IN_GAME_PAUSED = 6, GAME_OVER = 7;
+  private final int MAIN_MENU = 0, CHOOSE_NUMPLAYER = 1, HIGH_SCORES = 2, HIGH_SCORES_PAUSED = 3,
+                    IN_GAME_INTRO = 4, IN_GAME = 5, IN_GAME_PAUSED = 6, GAME_OVER = 7;
 
   private int menuOption = 0;
   private final int OPTION1 = 0, OPTION2 = 1, OPTION3 = 2, OPTION4 = 3;
@@ -53,6 +58,29 @@ public class GameGui extends JApplet implements KeyListener {
   User player;
   String playerName = "";
 
+  public static void main(String[] args) {
+    GameGui applet = new GameGui();
+
+    JFrame frame = new JFrame("Turtle Smasher");
+    frame.setContentPane(applet);
+    frame.pack();
+    frame.setLocation(100, 100);
+    frame.setVisible(true);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    applet.init();
+    applet.start();
+  }
+
+  public GameGui() {
+    setPreferredSize(new Dimension(APPLET_WIDTH, APPLET_HEIGHT));
+
+    initImageList();                               //initialize game's list of images
+    initSoundList();
+    logoIcon = new ImageIcon("images/Logo.png");
+    gameBackground = new ImageIcon("images/Background.jpg");
+  }
+
 
   //***************************************************************************************
   //init: initializes the applet window and other features
@@ -61,13 +89,9 @@ public class GameGui extends JApplet implements KeyListener {
     setSize(APPLET_WIDTH, APPLET_HEIGHT);          //set applet window dimensions
 
     addKeyListener(this);                          //??
+
     doubleBufferImage = createImage(this.getSize().width, this.getSize().height);
     doubleBufferGraphics = doubleBufferImage.getGraphics();
-
-    initImageList();                               //initialize game's list of images
-    initSoundList();
-    logoIcon = new ImageIcon("images/Logo.png");
-    gameBackground = new ImageIcon("images/Background.jpg");
 
     requestFocus();
 
@@ -325,7 +349,6 @@ public class GameGui extends JApplet implements KeyListener {
     playerList.saveList(HIGHSCORE_FILE);
   }
 
-
   //***************************************************************************************
   //keyPressed: invoked(runs) when a key is pressed on the keyboard.  passes the key to the game to take action.
   //Parameters:
@@ -525,8 +548,8 @@ public class GameGui extends JApplet implements KeyListener {
   //Parameters:
   //sound_type: an integer indicating which sound type... acts as index for soundList
   public void playSound(int sound_type) {
-    AudioClip ac = this.getAudioClip(getCodeBase(), soundList[sound_type]);
-    ac.play();
+    // AudioClip ac = this.getAudioClip(getCodeBase(), soundList[sound_type]);
+    // ac.play();
   }
 
 
