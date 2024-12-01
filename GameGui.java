@@ -12,6 +12,8 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.sql.Time;
 import javax.swing.*;
+import javax.sound.sampled.Clip;
+
 
 //this applet is the culminating game
 public class GameGui extends JApplet implements KeyListener {
@@ -41,7 +43,7 @@ public class GameGui extends JApplet implements KeyListener {
   private ImageIcon imageList[];                      //a list of picture files associate with different square types
   private ImageIcon gameBackground;
   private ImageIcon logoIcon;
-  private String soundList[];                         //a list of sound files associated with different square types
+  private Clip soundList[];                           //a list of sound files associated with different square types
 
   private GameBoard board;                            //the game board; keeps track of the board in memory
 
@@ -332,13 +334,13 @@ public class GameGui extends JApplet implements KeyListener {
   //initSoundList: sets up the sound files for each sound type
   //student to complete
   public void initSoundList() {
-    soundList = new String[SoundType.getNumTypes()];
+    soundList = new Clip[SoundType.getNumTypes()];
 
-    soundList[SoundType.MENU] = ("sound/menuOption.wav");
-    soundList[SoundType.THEME] = ("");
-    soundList[SoundType.JUMP] = ("sound/jump.wav");
-    soundList[SoundType.ATTACK] = ("");
-    soundList[SoundType.KILL] = ("");
+    soundList[SoundType.MENU] = SoundType.loadAudioClip("sound/menuOption.wav");
+    soundList[SoundType.THEME] = SoundType.loadAudioClip(null);
+    soundList[SoundType.JUMP] = SoundType.loadAudioClip("sound/jump.wav");
+    soundList[SoundType.ATTACK] = SoundType.loadAudioClip(null);
+    soundList[SoundType.KILL] = SoundType.loadAudioClip(null);
   }
 
 
@@ -547,9 +549,13 @@ public class GameGui extends JApplet implements KeyListener {
   //playSound: playes the given sound clip
   //Parameters:
   //sound_type: an integer indicating which sound type... acts as index for soundList
-  public void playSound(int sound_type) {
-    // AudioClip ac = this.getAudioClip(getCodeBase(), soundList[sound_type]);
-    // ac.play();
+  public void playSound(int soundType) {
+    Clip clip = soundList[soundType];
+
+    clip.stop();
+    clip.flush();
+    clip.setFramePosition(0);
+    clip.start();
   }
 
 
